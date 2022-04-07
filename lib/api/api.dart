@@ -1,14 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:miniproject/Authentication/register.dart';
-import 'package:miniproject/Screens/HomeAd/homeAd.dart';
 import 'package:miniproject/Screens/Login/components/body.dart';
-import 'package:miniproject/Screens/Predict/predict.dart';
+import 'package:miniproject/Screens/Predict/components/predict_body.dart';
 import 'package:miniproject/Screens/Signup/components/body.dart';
 import 'package:miniproject/home.dart';
+import 'package:miniproject/main.dart';
 import 'package:miniproject/storage/storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 var responseLogin, result, responseSup, loggedValue, resultS;
 var baseUrl = "https://health-companion-22.herokuapp.com";
@@ -64,9 +64,11 @@ class Api {
     print(passSignUpController.text);
 
     print("objec out");
-    if (responseSup.statusCode == 200) {
+    resultS = jsonDecode(responseSup.body)["status"];
+    print(resultS);
+    if (resultS == "Created") {
       print("objec 1nout");
-      resultS = jsonDecode(responseSup.body)["token"];
+
       print(jsonDecode(responseSup.body)["token"]);
       secureStorage.writeSecureData("token", resultS);
       print(responseSup.body);
@@ -82,6 +84,53 @@ class Api {
             "something went Wrong",
             style: TextStyle(fontSize: 15),
           )));
+    }
+  }
+
+  Future<void> imgUpload(
+      BuildContext context, String string, File? image) async {
+    var strings = string;
+    print(image);
+    // File? img = image;
+
+    print(strings);
+    var token = await secureStorage.readSecureData("token");
+    // var resimg = await http.post(Uri.parse("$baseUrl/imgupload"),
+    //     headers: ({"Authorization": "token $token"}),
+    //     body: ({"Xray": "$image"}));
+    var headers = {
+      'content-type': 'multipart/form-data',
+      'Accept': 'application/json',
+      "Authorization": "token $token"
+    };
+
+    //setup request
+    var resimg = http.MultipartRequest("POST", Uri.parse("$baseUrl/imgupload"));
+
+    //add files to reqest body
+    resimg.files.add(await http.MultipartFile.fromPath(
+      'Xray',
+      image!.path,
+    ));
+
+    //add header
+    resimg.headers.addAll(headers);
+    print(resimg.files);
+    try {
+      var streamedResponse = await resimg.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      print(response.body);
+      var resp = jsonDecode(response.body)["status"];
+      if (resp == "success") {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Color.fromARGB(255, 54, 244, 54),
+            content: Text(
+              jsonDecode(response.body)["result"],
+              style: TextStyle(fontSize: 15),
+            )));
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }
