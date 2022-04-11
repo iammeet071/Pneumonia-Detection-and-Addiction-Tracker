@@ -190,8 +190,8 @@ class Api {
     //add header
   }
 
-  Future<int> getLenght(BuildContext context) async {
-    var xyz = await info(context);
-    return xyz.length;
-  }
+  // Future<int> getLenght(BuildContext context) async {
+  //   var xyz = await info(context);
+  //   return xyz.length;
+  // }
 }

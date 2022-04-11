@@ -37,10 +37,13 @@ class _AddictionState extends State<Addiction> {
                   backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                 ),
                 onPressed: () async {
-                  await Api().info(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return Home();
-                  }));
+                  setState(() {
+                    Api().info(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return Home();
+                    }));
+                  });
                 },
                 child: const Text('Go')),
             ElevatedButton(

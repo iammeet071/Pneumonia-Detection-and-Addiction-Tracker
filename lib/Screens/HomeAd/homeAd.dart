@@ -139,41 +139,39 @@ class _HomeState extends State<Home> {
           backgroundColor: kPrimaryColor,
           title: const Text('Addiciton Tracker'),
         ),
-        body: ListView.builder(
-          itemCount: itemCount,
-          itemBuilder: (context, index) {
-            return AdCard(
-              title: (info1[index]["title"]).toString().replaceFirst(
-                  info1[index]["title"][0],
-                  (info1[index]["title"][0]).toString().toUpperCase()),
-              day: now
-                  .difference(DateTime.parse(info1[index]['startDate']))
-                  .inDays,
-              unit: info1[index]["unit_price"].toInt() *
-                  now
-                      .difference(DateTime.parse(info1[index]['startDate']))
-                      .inDays,
-            );
+        body: FutureBuilder(
+          future: api.info(context),
+          builder: (context, AsyncSnapshot asyncSnapshot) {
+            if (!asyncSnapshot.hasData) {
+              print("asyncSnapshot.hasData");
+              print(asyncSnapshot.hasData);
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return ListView.builder(
+                itemCount: itemCount,
+                itemBuilder: (context, index) {
+                  return AdCard(
+                    title: (asyncSnapshot.data[index]["title"])
+                        .toString()
+                        .replaceFirst(
+                            asyncSnapshot.data[index]["title"][0],
+                            (asyncSnapshot.data[index]["title"][0])
+                                .toString()
+                                .toUpperCase()),
+                    day: now
+                        .difference(DateTime.parse(
+                            asyncSnapshot.data[index]['startDate']))
+                        .inDays,
+                    unit: asyncSnapshot.data[index]["unit_price"].toInt() *
+                        now
+                            .difference(DateTime.parse(
+                                asyncSnapshot.data[index]['startDate']))
+                            .inDays,
+                  );
+                },
+              );
+            }
           },
-          // child: Column(
-          //   children: [
-          //     AdCard(
-          //       title: 'Alcohol',
-          //       day: 14,
-          //       unit: 100,
-          //     ),
-          //     AdCard(
-          //       title: 'Junk Food',
-          //       day: 36,
-          //       unit: 20,
-          //     ),
-          //     AdCard(
-          //       title: 'Gaming',
-          //       day: 2,
-          //       unit: 40,
-          //     )
-          //   ],
-          // ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
