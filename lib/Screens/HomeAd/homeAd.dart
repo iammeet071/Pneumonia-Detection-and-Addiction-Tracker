@@ -292,6 +292,11 @@ class AdCard extends StatelessWidget {
       padding: const EdgeInsets.all(15.0),
       child: InkWell(
         onTap: () {
+          print(unit);
+          print(day);
+          print(title);
+          print(info1);
+          print("title");
           Navigator.push(
             context,
             MaterialPageRoute(

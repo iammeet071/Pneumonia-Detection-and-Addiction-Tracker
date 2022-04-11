@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:miniproject/Screens/HomeAd/homeAd.dart';
 import 'package:miniproject/Screens/config/palette.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:miniproject/constants.dart';
+import 'package:jiffy/jiffy.dart';
 
 class AdInfo extends StatelessWidget {
   String title;
@@ -75,7 +77,7 @@ class AdInfo extends StatelessWidget {
                         'Start Date :',
                         style: TextStyle(color: Colors.white, fontSize: 22),
                       ),
-                      Text('Apr 2,2022',
+                      Text(Jiffy(now).subtract(days: day).yMMMMd.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),
@@ -89,7 +91,7 @@ class AdInfo extends StatelessWidget {
                         'Duration :',
                         style: TextStyle(color: Colors.white, fontSize: 22),
                       ),
-                      Text('100 days',
+                      Text(day.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),
@@ -103,7 +105,7 @@ class AdInfo extends StatelessWidget {
                         'Unit Price :',
                         style: TextStyle(color: Colors.white, fontSize: 22),
                       ),
-                      Text('₹ 100',
+                      Text('₹ $unit',
                           style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),

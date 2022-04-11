@@ -4,6 +4,7 @@ import 'package:miniproject/Screens/config/palette.dart';
 
 import 'package:miniproject/Screens/Ads/AdInfo.dart';
 import 'package:miniproject/Screens/Ads/AdPosts.dart';
+import 'package:miniproject/api/api.dart';
 import 'package:miniproject/constants.dart';
 
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -21,13 +22,13 @@ class AdDetails extends StatefulWidget {
 }
 
 class _AdDetailsState extends State<AdDetails> {
-  int _selectedIndex = 1;
+  int selectedIndex = 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
@@ -44,8 +45,8 @@ class _AdDetailsState extends State<AdDetails> {
             onPressed: () => Navigator.pop(context, false),
           )),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        currentIndex: selectedIndex,
+        onTap: onItemTapped,
         backgroundColor: Palette.secondary,
         selectedItemColor: kPrimaryColor,
         items: const <BottomNavigationBarItem>[
@@ -64,11 +65,8 @@ class _AdDetailsState extends State<AdDetails> {
       ),
       body: [
         AdPosts(),
-        AdInfo(
-            title: info1[_selectedIndex]["title"],
-            day: widget.day,
-            unit: widget.unit)
-      ].elementAt(_selectedIndex),
+        AdInfo(title: widget.title, day: widget.day, unit: widget.unit)
+      ].elementAt(selectedIndex),
     );
   }
 }
