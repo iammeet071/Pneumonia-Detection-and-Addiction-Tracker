@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:miniproject/Screens/HomeAd/homeAd.dart';
 import 'package:miniproject/Screens/Login/components/body.dart';
 import 'package:miniproject/Screens/Predict/components/predict_body.dart';
 import 'package:miniproject/Screens/Signup/components/body.dart';
@@ -11,7 +14,7 @@ import 'package:miniproject/main.dart';
 import 'package:miniproject/storage/storage.dart';
 
 var responseLogin, result, responseSup, loggedValue, resultS;
-var baseUrl = "https://health-companion-22.herokuapp.com";
+var baseUrl = "http://health-companion-22.herokuapp.com";
 
 class Api {
   final SecureStorage secureStorage = SecureStorage();
@@ -68,9 +71,9 @@ class Api {
     print(resultS);
     if (resultS == "Created") {
       print("objec 1nout");
-
+      var tk = jsonDecode(responseSup.body)["token"];
       print(jsonDecode(responseSup.body)["token"]);
-      secureStorage.writeSecureData("token", resultS);
+      secureStorage.writeSecureData("token", tk);
       print(responseSup.body);
       print(jsonDecode(responseSup.body)["token"]);
       Navigator.push(
@@ -132,5 +135,63 @@ class Api {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> createAddiction(BuildContext context) async {
+    var token1 = await secureStorage.readSecureData("token");
+    print("objectabc");
+    print(token1);
+    print("objectabcd");
+    var createAd = await http.post(Uri.parse("$baseUrl/createAddiction"),
+        headers: ({
+          'Accept': 'application/json',
+          "Authorization": "token $token1"
+        }),
+        body: ({
+          "title": title.text,
+          "unit_price": unit_price.text,
+          "startDate": start.text,
+          "endDate": end.text
+        }));
+    //setup request
+    print("title");
+    print(title.text);
+    print(createAd.body);
+    if (jsonDecode(createAd.body)["aid"] != null) {
+      Navigator.push(context, MaterialPageRoute(builder: ((context) {
+        return Home();
+      })));
+    }
+
+    //add header
+  }
+
+  Future<List> info(BuildContext context) async {
+    var tokeninfo = await secureStorage.readSecureData("token");
+    print(tokeninfo);
+    var info = await http.get(Uri.parse("$baseUrl/info"),
+        headers: ({
+          'Accept': 'application/json',
+          "Authorization": "token $tokeninfo"
+        }));
+    //setup request
+    print(title.text);
+    var stores = json.decode(info.body);
+    final length = stores.length;
+    print(length);
+    print(stores);
+
+    if (length != 0) {
+      info.toString();
+      read(context, info);
+    }
+    return stores;
+
+    //add header
+  }
+
+  Future<int> getLenght(BuildContext context) async {
+    var xyz = await info(context);
+    return xyz.length;
   }
 }

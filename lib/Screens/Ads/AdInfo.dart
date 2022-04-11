@@ -3,13 +3,11 @@ import 'package:miniproject/Screens/config/palette.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:miniproject/constants.dart';
 
-
 class AdInfo extends StatelessWidget {
-    String title;
+  String title;
   int day;
   int unit;
-  AdInfo(
-      {Key? key, required this.title, required this.day, required this.unit})
+  AdInfo({Key? key, required this.title, required this.day, required this.unit})
       : super(key: key);
 
   @override
@@ -17,7 +15,9 @@ class AdInfo extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 50,),
+          const SizedBox(
+            height: 50,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Row(
@@ -36,7 +36,9 @@ class AdInfo extends StatelessWidget {
                       const Text(
                         'Money Saved',
                         style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold,color: kPrimaryColor),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryColor),
                       ),
                       const SizedBox(
                         height: 20,

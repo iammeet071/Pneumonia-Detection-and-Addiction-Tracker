@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:miniproject/Screens/HomeAd/homeAd.dart';
 import 'package:miniproject/Screens/config/palette.dart';
 
 import 'package:miniproject/Screens/Ads/AdInfo.dart';
@@ -20,7 +21,6 @@ class AdDetails extends StatefulWidget {
 }
 
 class _AdDetailsState extends State<AdDetails> {
-
   int _selectedIndex = 1;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -36,13 +36,13 @@ class _AdDetailsState extends State<AdDetails> {
     return Scaffold(
       backgroundColor: Palette.secondary,
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: kPrimaryColor,
-        title: Text(widget.title),
-         leading: IconButton(icon:Icon(Icons.arrow_back),
-            onPressed:() => Navigator.pop(context, false),
-          )
-      ),
+          automaticallyImplyLeading: true,
+          backgroundColor: kPrimaryColor,
+          title: Text(widget.title),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context, false),
+          )),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -62,7 +62,13 @@ class _AdDetailsState extends State<AdDetails> {
           ),
         ],
       ),
-      body: [AdPosts(),AdInfo(title: widget.title, day: widget.day, unit: widget.unit)].elementAt(_selectedIndex),
+      body: [
+        AdPosts(),
+        AdInfo(
+            title: info1[_selectedIndex]["title"],
+            day: widget.day,
+            unit: widget.unit)
+      ].elementAt(_selectedIndex),
     );
   }
 }
