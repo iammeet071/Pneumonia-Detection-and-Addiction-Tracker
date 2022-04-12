@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:miniproject/Screens/Ads/AdDetails.dart';
+import 'package:miniproject/Screens/Ads/AdPosts.dart';
 import 'package:miniproject/Screens/HomeAd/homeAd.dart';
 import 'package:miniproject/Screens/Login/components/body.dart';
 import 'package:miniproject/Screens/Predict/components/predict_body.dart';
@@ -190,9 +192,53 @@ class Api {
     //add header
   }
 
-  Future<int> currentIndex(BuildContext context, int index) async {
-    print(index);
+  Future<void> createPost(BuildContext context) async {
+    var tokenPost = await secureStorage.readSecureData("token");
+    print("objectabc");
+    print(tokenPost);
+    print("objectabcd");
+    var createPost = await http.post(Uri.parse("$baseUrl/posts/create"),
+        headers: ({
+          'Accept': 'application/json',
+          "Authorization": "token $tokenPost"
+        }),
+        body: ({
+          "aid": aid.text,
+          "title": title1.text,
+          "body": body.text,
+        }));
+    //setup request
 
-    return index;
+    var aha = jsonDecode(createPost.body);
+    if (jsonDecode(createPost.body)["aid"] != null) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) {
+        return AdDetails(title: "title", day: 1, unit: 1);
+      })));
+    }
+  }
+
+  Future<List> getAllPost(BuildContext context) async {
+    var tokenget = await secureStorage.readSecureData("token");
+
+    var infoget = await http.post(Uri.parse("$baseUrl/posts"),
+        headers: ({
+          'Accept': 'application/json',
+          "Authorization": "token $tokenget"
+        }),
+        body: ({"aid": aid.text}));
+    //setup request
+
+    var stores1 = json.decode(infoget.body);
+
+    final length1 = stores1.length;
+    if (length1 != 0) {
+      info.toString();
+      readPost(context, infoget);
+    }
+    print(stores1);
+
+    return stores1;
+
+    //add header
   }
 }

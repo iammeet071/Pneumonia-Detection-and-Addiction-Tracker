@@ -17,7 +17,7 @@ TextEditingController title = TextEditingController();
 TextEditingController unit_price = TextEditingController();
 TextEditingController start = TextEditingController();
 TextEditingController end = TextEditingController();
-final _formKey = GlobalKey<FormState>();
+final _formKey2 = GlobalKey<FormState>();
 Api api = new Api();
 var info1;
 DateTime finalday = new DateTime.now();
@@ -139,40 +139,46 @@ class _HomeState extends State<Home> {
           backgroundColor: kPrimaryColor,
           title: const Text('Addiciton Tracker'),
         ),
-        body: FutureBuilder(
-          future: api.info(context),
-          builder: (context, AsyncSnapshot asyncSnapshot) {
-            if (!asyncSnapshot.hasData) {
-              print("asyncSnapshot.hasData");
-              print(asyncSnapshot.hasData);
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return ListView.builder(
-                itemCount: itemCount,
-                itemBuilder: (context, index) {
-                  return AdCard(
-                    title: (asyncSnapshot.data[index]["title"])
-                        .toString()
-                        .replaceFirst(
-                            asyncSnapshot.data[index]["title"][0],
-                            (asyncSnapshot.data[index]["title"][0])
-                                .toString()
-                                .toUpperCase()),
-                    day: now
-                        .difference(DateTime.parse(
-                            asyncSnapshot.data[index]['startDate']))
-                        .inDays,
-                    unit: asyncSnapshot.data[index]["unit_price"].toInt() *
-                        now
-                            .difference(DateTime.parse(
-                                asyncSnapshot.data[index]['startDate']))
-                            .inDays,
-                  );
+        body: itemCount != 0
+            ? FutureBuilder(
+                future: api.info(context),
+                builder: (context, AsyncSnapshot asyncSnapshot) {
+                  if (!asyncSnapshot.hasData) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    ));
+                  } else {
+                    return ListView.builder(
+                      itemCount: itemCount,
+                      itemBuilder: (context, index) {
+                        return AdCard(
+                          title: (asyncSnapshot.data[index]["title"])
+                              .toString()
+                              .replaceFirst(
+                                  asyncSnapshot.data[index]["title"][0],
+                                  (asyncSnapshot.data[index]["title"][0])
+                                      .toString()
+                                      .toUpperCase()),
+                          day: now
+                              .difference(DateTime.parse(
+                                  asyncSnapshot.data[index]['startDate']))
+                              .inDays,
+                          unit: asyncSnapshot.data[index]["unit_price"]
+                                  .toInt() *
+                              now
+                                  .difference(DateTime.parse(
+                                      asyncSnapshot.data[index]['startDate']))
+                                  .inDays,
+                        );
+                      },
+                    );
+                  }
                 },
-              );
-            }
-          },
-        ),
+              )
+            : const Center(
+                child: Text("No ads"),
+              ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showDialog(
@@ -184,7 +190,7 @@ class _HomeState extends State<Home> {
                     content: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Form(
-                        key: _formKey,
+                        key: _formKey2,
                         child: Column(
                           children: <Widget>[
                             TextFormField(
@@ -255,7 +261,7 @@ class _HomeState extends State<Home> {
                           onPressed: () async {
                             setState(() {
                               print("okay");
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey2.currentState!.validate()) {
                                 // print(title.text);
                                 // print(unit_price.text);
                                 // print(start.text);

@@ -105,7 +105,7 @@ class AdInfo extends StatelessWidget {
                         'Unit Price :',
                         style: TextStyle(color: Colors.white, fontSize: 22),
                       ),
-                      Text('₹ $unit',
+                      Text((unit / day).toString(),
                           style: TextStyle(color: Colors.white, fontSize: 20))
                     ],
                   ),
